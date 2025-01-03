@@ -3,13 +3,13 @@ name: Auth Code Quality Checks
 on:
   pull_request:
     paths:
-        - 'auth_service/**'
+      - 'auth_service/**'
     branches:
       - master
       - dev
   push:
     paths:
-        - 'auth_service/**'
+      - 'auth_service/**'
     branches:
       - master
       - dev
