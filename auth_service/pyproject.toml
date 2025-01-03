@@ -12,6 +12,7 @@ uvicorn = "^0.34.0"
 motor = "^3.6.0"
 beanie = "^1.28.0"
 pydantic = "^2.10.4"
+python-json-logger = "^3.2.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -27,7 +28,7 @@ build-backend = "poetry.core.masonry.api"
 
 
 [tool.mypy]
-files = "src/, tests/"
+files = "app/, tests/"
 ignore_missing_imports = true
 disallow_untyped_calls = true
 disallow_untyped_defs = true
