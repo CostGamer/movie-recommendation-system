@@ -43,15 +43,18 @@ jobs:
 
       - name: Install dependencies with Poetry
         run: |
-          poetry install --no-interaction --no-root --with dev --directory auth_service
+          cd auth_service
+          poetry install --no-interaction --no-root --with dev
 
       - name: Run black (formatting)
         run: |
-          poetry run black --check auth_service
+          cd auth_service
+          poetry run black --check .
 
       - name: Run ruff (linting)
         run: |
-          poetry run ruff check auth_service
+          cd auth_service
+          poetry run ruff check .
 
   type_check:
     runs-on: ubuntu-latest
@@ -81,8 +84,10 @@ jobs:
 
       - name: Install dependencies with Poetry
         run: |
-          poetry install --no-interaction --no-root --with dev --directory auth_service
+          cd auth_service
+          poetry install --no-interaction --no-root --with dev
 
       - name: Run mypy
         run: |
-          poetry run mypy auth_service --ignore-missing-imports
+          cd auth_service
+          poetry run mypy . --ignore-missing-imports
