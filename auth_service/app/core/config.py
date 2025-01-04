@@ -5,15 +5,15 @@ from pydantic import BaseModel, Field
 
 
 class LoggingSettings(BaseModel):
-    log_level = Field(default="DEBUG", alias="LOG_LEVEL")
-    log_file = Field(alias="LOG_FILE")
-    log_encoding = Field(default="utf-8", alias="LOG_ENCODING")
+    log_level: str = Field(default="DEBUG", alias="LOG_LEVEL")
+    log_file: str = Field(alias="LOG_FILE")
+    log_encoding: str = Field(default="utf-8", alias="LOG_ENCODING")
 
 
 class MongoDatabaseSettings(BaseModel):
-    mongo_host = Field(default="localhost", alias="MONGO_HOST")
-    mongo_port = Field(default="0000", alias="MONGO_PORT")
-    mongo_db_name = Field(default="db", alias="MONGO_DB_NAME")
+    mongo_host: str = Field(default="localhost", alias="MONGO_HOST")
+    mongo_port: int = Field(default="0000", alias="MONGO_PORT")
+    mongo_db_name: str = Field(default="db", alias="MONGO_DB_NAME")
 
     @property
     def mongo_db_uri(self) -> str:
@@ -21,7 +21,7 @@ class MongoDatabaseSettings(BaseModel):
 
 
 class OtherSettings(BaseModel):
-    origins = Field(
+    origins: str = Field(
         default="http://localhost:8000,http://127.0.0.1:8000", alias="ALLOWED_IPS"
     )
 

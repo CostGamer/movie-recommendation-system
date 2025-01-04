@@ -1,3 +1,3 @@
-from auth_service.app.core.config import Settings
+from app.core.config import Settings
 
 all_configs = Settings()

@@ -1,8 +1,9 @@
 import logging
 import sys
 
-from auth_service.app.core.config import LoggingSettings
 from pythonjsonlogger import jsonlogger
+
+from app.core.config import LoggingSettings
 
 logger = logging.getLogger(__name__)
 

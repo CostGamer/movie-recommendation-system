@@ -1,10 +1,11 @@
 from logging import getLogger
 
-from auth_service.app.core import all_configs
-from auth_service.app.core.logs import init_logger
-from auth_service.app.middleware.logger import LoggerMiddleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
+from app.core import all_configs
+from app.core.logs import init_logger
+from app.middleware.logger import LoggerMiddleware
 
 logger = getLogger(__name__)
 
