@@ -3,7 +3,7 @@ import sys
 
 from pythonjsonlogger import jsonlogger
 
-from app.core.config import LoggingSettings
+from .config import LoggingSettings
 
 logger = logging.getLogger(__name__)
 

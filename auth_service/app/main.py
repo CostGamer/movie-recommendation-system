@@ -1,21 +1,35 @@
+from contextlib import asynccontextmanager
 from logging import getLogger
+from typing import AsyncGenerator
 
+from auth_service.app.api.auth_routes import auth_router
+from auth_service.app.api.exceptions import (
+    email_already_exists_error,
+    registration_troubles_error,
+)
+from auth_service.app.core import all_configs
+from auth_service.app.core.custom_exceptions import (
+    TroublesWithRegistrationError,
+    UserWithThisEmailExistsError,
+)
+from auth_service.app.core.logs import init_logger
+from auth_service.app.DB import mongo_db_init
+from auth_service.app.middleware.logger import LoggerMiddleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from app.core import all_configs
-from app.core.logs import init_logger
-from app.middleware.logger import LoggerMiddleware
 
 logger = getLogger(__name__)
 
 
 def register_exception_handlers(app: FastAPI) -> None:
-    pass
+    app.add_exception_handler(UserWithThisEmailExistsError, email_already_exists_error)  # type: ignore
+    app.add_exception_handler(
+        TroublesWithRegistrationError, registration_troubles_error  # type: ignore
+    )
 
 
 def init_routers(app: FastAPI) -> None:
-    pass
+    app.include_router(auth_router)
 
 
 def init_middlewares(app: FastAPI) -> None:
@@ -31,11 +45,19 @@ def init_middlewares(app: FastAPI) -> None:
     app.add_middleware(LoggerMiddleware)
 
 
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    await mongo_db_init.init()
+    yield
+    await mongo_db_init.close()
+
+
 def setup_app() -> FastAPI:
     app = FastAPI(
         title="Auth Service API",
         description="Provide auth of new users & log in for existing users",
         version="0.1.0",
+        lifespan=lifespan,
     )
     init_logger(all_configs.logging)
     init_routers(app)
