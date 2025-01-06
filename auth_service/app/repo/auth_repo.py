@@ -4,7 +4,7 @@ from typing import Type
 import bcrypt
 import jwt
 from auth_service.app.core import all_configs
-from auth_service.app.core.config import TOKEN_TYPE_FIELD
+from auth_service.app.core.config import ACCESS_TOKEN, REFRESH_TOKEN, TOKEN_TYPE_FIELD
 from auth_service.app.DB.models.beanie_models import User
 from auth_service.app.DB.models.pydantic_models import RegisterUser
 from beanie import Document
@@ -48,10 +48,11 @@ class AuthRepo:
     async def create_jwt(
         self,
         token_type: str,
-        token_payload: dict,
+        token_payload: dict | None = None,
     ) -> str:
         jwt_payload = {TOKEN_TYPE_FIELD: token_type}
-        jwt_payload.update(token_payload)
+        if token_payload is not None:
+            jwt_payload.update(token_payload)
         return await self.encode_jwt(
             payload=jwt_payload,
         )
@@ -66,9 +67,9 @@ class AuthRepo:
 
     async def check_email_already_exists(
         self,
-        user_data: RegisterUser,
+        email: str,
     ) -> bool:
-        query = await self._user_model.find_one({"email": user_data.email})
+        query = await self._user_model.find_one({"email": email})
         return query is not None
 
     async def insert_registered_user_to_db(
@@ -80,5 +81,31 @@ class AuthRepo:
             age=user_data.age,
             password=self.hash_password(user_data.password),
         )
-
         return await self._user_model.insert_one(user)
+
+    async def fetched_user_data(self, email: str) -> Document:
+        find_res = await self._user_model.find_one({"email": email})
+        assert find_res is not None
+        return find_res
+
+    async def validate_password(
+        self,
+        password: str,
+        hash_password: bytes,
+    ) -> bool:
+        return bcrypt.checkpw(
+            password=password.encode(),
+            hashed_password=hash_password,
+        )
+
+    async def create_access_token(self, user_id: str) -> str:
+        initial_payload = {"sub": user_id}
+        return await self.create_jwt(
+            token_type=ACCESS_TOKEN,
+            token_payload=initial_payload,
+        )
+
+    async def create_refresh_token(self) -> str:
+        return await self.create_jwt(
+            token_type=REFRESH_TOKEN,
+        )

@@ -33,4 +33,15 @@ register_user_exceptions = {
 }
 
 
+login_user_exceptions = {
+    404: {
+        "invalid_username_or_password_error": {
+            "summary": "UserWithThisEmailExistsError",
+            "value": {"detail": "Email or password Not Found"},
+        },
+    },
+}
+
+
 register_user_responses = create_error_responses(register_user_exceptions)
+login_user_responses = create_error_responses(login_user_exceptions)

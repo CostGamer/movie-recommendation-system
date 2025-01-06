@@ -18,15 +18,14 @@ class GetUser(BaseModel):
     email: str = Field(..., description="user email")
 
 
-# class JWTValidateUser(BaseModel):
-#     model_config = ConfigDict(from_attributes=True, strict=True)
+class JWTValidateUser(BaseModel):
+    model_config = ConfigDict(from_attributes=True, strict=True)
 
-#     object_id: PydanticObjectId = Field(
-#         ..., description="unique subject identifier (user ID from MongoDB)"
-#     )
-#     name: str = Field(..., description="user name")
-#     email: str = Field(..., description="user email")
-#     password: bytes = Field(..., description="user hashed password")
+    object_id: str = Field(
+        ..., description="unique subject identifier (user ID from MongoDB)"
+    )
+    name: str = Field(..., description="user name")
+    email: str = Field(..., description="user email")
 
 
 class JWTTokenInfo(BaseModel):

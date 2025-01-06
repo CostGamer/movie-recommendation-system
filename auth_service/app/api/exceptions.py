@@ -22,3 +22,12 @@ async def registration_troubles_error(
         status_code=400,
         content={"detail": "Some problems with insertion to db"},
     )
+
+
+async def invalid_username_or_password_error(
+    request: Request, exc: UserWithThisEmailExistsError
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=404,
+        content={"detail": "Email or password Not Found"},
+    )

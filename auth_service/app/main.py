@@ -5,10 +5,12 @@ from typing import AsyncGenerator
 from auth_service.app.api.auth_routes import auth_router
 from auth_service.app.api.exceptions import (
     email_already_exists_error,
+    invalid_username_or_password_error,
     registration_troubles_error,
 )
 from auth_service.app.core import all_configs
 from auth_service.app.core.custom_exceptions import (
+    InvalidUsernameOrPasswordError,
     TroublesWithRegistrationError,
     UserWithThisEmailExistsError,
 )
@@ -26,6 +28,7 @@ def register_exception_handlers(app: FastAPI) -> None:
     app.add_exception_handler(
         TroublesWithRegistrationError, registration_troubles_error  # type: ignore
     )
+    app.add_exception_handler(InvalidUsernameOrPasswordError, invalid_username_or_password_error)  # type: ignore
 
 
 def init_routers(app: FastAPI) -> None:
