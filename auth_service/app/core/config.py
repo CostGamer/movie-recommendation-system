@@ -3,6 +3,10 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
+TOKEN_TYPE_FIELD = "type"
+ACCESS_TOKEN = "access"
+REFRESH_TOKEN = "refresh"
+
 
 class LoggingSettings(BaseModel):
     log_level: str = Field(default="DEBUG", alias="LOG_LEVEL")
@@ -12,12 +16,20 @@ class LoggingSettings(BaseModel):
 
 class MongoDatabaseSettings(BaseModel):
     mongo_host: str = Field(default="localhost", alias="MONGO_HOST")
-    mongo_port: int = Field(default="0000", alias="MONGO_PORT")
+    mongo_port: int = Field(default=0000, alias="MONGO_PORT")
     mongo_db_name: str = Field(default="db", alias="MONGO_DB_NAME")
 
     @property
     def mongo_db_uri(self) -> str:
         return f"mongodb://{self.mongo_host}:{self.mongo_port}"
+
+
+class JWTSettings(BaseModel):
+    private_key_path: Path = Field(alias="PRIVATE_KEY_PATH")
+    public_key_path: Path = Field(alias="PUBLIC_KEY_PATH")
+    algorithm: str = Field(default="RS256", alias="JWT_ALGORITHM")
+    access_jwt_expire_min: int = Field(default=15, alias="JWT_EXPIRATION_MINUTES")
+    refresh_jwt_expire_days: int = Field(default=15, alias="JWT_EXPIRATION_DAYS")
 
 
 class OtherSettings(BaseModel):
@@ -36,6 +48,7 @@ class Settings(BaseModel):
         default_factory=lambda: MongoDatabaseSettings(**env)
     )
     different: OtherSettings = Field(default_factory=lambda: OtherSettings(**env))
+    jwt: JWTSettings = Field(default_factory=lambda: JWTSettings(**env))
 
 
 def load_dotenv(path: str | Path) -> None:

@@ -6,13 +6,8 @@ class RegisterUser(BaseModel):
 
     email: str = Field(..., description="user email")
     password: str = Field(..., description="user password", min_length=8)
-
-
-class PostUser(BaseModel):
-    model_config = ConfigDict(from_attributes=True)
-
-    name: str = Field(..., description="user first name")
-    age: int = Field(..., description="user's age")
+    name: str = Field(..., description="user name")
+    age: int = Field(..., description="user age")
 
 
 class GetUser(BaseModel):
@@ -23,12 +18,15 @@ class GetUser(BaseModel):
     email: str = Field(..., description="user email")
 
 
-class JWTUser(BaseModel):
-    model_config = ConfigDict(from_attributes=True, strict=True)
+# class JWTValidateUser(BaseModel):
+#     model_config = ConfigDict(from_attributes=True, strict=True)
 
-    email: str = Field(..., description="user email")
-    password: bytes = Field(..., description="user hashed password")
-    active: bool = Field(..., description="show the user active status")
+#     object_id: PydanticObjectId = Field(
+#         ..., description="unique subject identifier (user ID from MongoDB)"
+#     )
+#     name: str = Field(..., description="user name")
+#     email: str = Field(..., description="user email")
+#     password: bytes = Field(..., description="user hashed password")
 
 
 class JWTTokenInfo(BaseModel):
