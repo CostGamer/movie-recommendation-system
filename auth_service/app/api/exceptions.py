@@ -2,6 +2,7 @@ from auth_service.app.core.custom_exceptions import (
     TroublesWithRegistrationError,
     UserWithThisEmailExistsError,
 )
+from email_validator import EmailNotValidError
 from fastapi import Request
 from fastapi.responses import JSONResponse
 
@@ -30,4 +31,13 @@ async def invalid_username_or_password_error(
     return JSONResponse(
         status_code=404,
         content={"detail": "Email or password Not Found"},
+    )
+
+
+async def email_not_valid_error(
+    request: Request, exc: EmailNotValidError
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=409,
+        content={"detail": "This email is not valid"},
     )

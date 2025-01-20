@@ -5,6 +5,7 @@ from typing import AsyncGenerator
 from auth_service.app.api.auth_routes import auth_router
 from auth_service.app.api.exceptions import (
     email_already_exists_error,
+    email_not_valid_error,
     invalid_username_or_password_error,
     registration_troubles_error,
 )
@@ -17,6 +18,7 @@ from auth_service.app.core.custom_exceptions import (
 from auth_service.app.core.logs import init_logger
 from auth_service.app.DB import mongo_db_init
 from auth_service.app.middleware.logger import LoggerMiddleware
+from email_validator import EmailNotValidError
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -29,6 +31,7 @@ def register_exception_handlers(app: FastAPI) -> None:
         TroublesWithRegistrationError, registration_troubles_error  # type: ignore
     )
     app.add_exception_handler(InvalidUsernameOrPasswordError, invalid_username_or_password_error)  # type: ignore
+    app.add_exception_handler(EmailNotValidError, email_not_valid_error)  # type: ignore
 
 
 def init_routers(app: FastAPI) -> None:

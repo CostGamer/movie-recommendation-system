@@ -19,17 +19,3 @@ class MongoDB:
     async def close(self) -> None:
         """Закрытие клиента."""
         self.client.close()
-
-
-# def get_mongo_client(
-#     mongo_db: MongoDB,
-# ) -> Callable[[], AsyncIterator[AsyncIOMotorDatabase]]:
-#     """Генератор для предоставления базы данных."""
-
-#     async def receive_db() -> AsyncIterator[AsyncIOMotorDatabase]:
-#         try:
-#             yield mongo_db.db
-#         finally:
-#             await mongo_db.close()
-
-#     return receive_db

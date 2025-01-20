@@ -23,6 +23,10 @@ register_user_exceptions = {
             "summary": "UserWithThisEmailExistsError",
             "value": {"detail": "This email already in the system"},
         },
+        "email_not_valid_error": {
+            "summary": "EmailNotValidError",
+            "value": {"detail": "This email is not valid"},
+        },
     },
     400: {
         "registration_troubles_error": {

@@ -17,12 +17,15 @@ class User(Document):
 
 
 class Event(Document):
-    aggregate_id: str = Field(..., description="some ID")
+    aggregate_id: str | None = Field(..., description="some ID")
     event_type: str = Field(
         ..., description="type of event ex: UserCreated, UserUpdated, etc"
     )
     payload: dict[str, Any] = Field(..., description="all necessary info from query")
-    created_at: dt = dt.now(timezone.utc)
+    created_at: dt = Field(
+        default_factory=lambda: dt.now(timezone.utc),
+        description="Timestamp of when the event was created",
+    )
 
     class Settings:
         name = "events"
