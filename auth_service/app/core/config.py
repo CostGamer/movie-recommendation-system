@@ -6,6 +6,9 @@ from pydantic import BaseModel, Field
 TOKEN_TYPE_FIELD = "type"
 ACCESS_TOKEN = "access"
 REFRESH_TOKEN = "refresh"
+USER_CREATED = "UserCreated"
+USER_LOGIN = "UserLogin"
+USER_ISSUE = "Problem"
 
 
 class LoggingSettings(BaseModel):

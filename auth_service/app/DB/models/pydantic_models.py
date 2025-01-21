@@ -1,4 +1,13 @@
+from enum import Enum
+from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field
+
+
+class EventType(str, Enum):
+    USER_CREATED = "UserCreated"
+    USER_LOGIN = "UserLogin"
+    USER_ISSUE = "Problem"
 
 
 class RegisterUser(BaseModel):
@@ -18,18 +27,27 @@ class GetUser(BaseModel):
     email: str = Field(..., description="user email")
 
 
-# class JWTValidateUser(BaseModel):
-#     model_config = ConfigDict(from_attributes=True, strict=True)
+class JWTValidateUser(BaseModel):
+    model_config = ConfigDict(from_attributes=True, strict=True)
 
-#     object_id: PydanticObjectId = Field(
-#         ..., description="unique subject identifier (user ID from MongoDB)"
-#     )
-#     name: str = Field(..., description="user name")
-#     email: str = Field(..., description="user email")
-#     password: bytes = Field(..., description="user hashed password")
+    object_id: str = Field(
+        ..., description="unique subject identifier (user ID from MongoDB)"
+    )
+    name: str = Field(..., description="user name")
+    email: str = Field(..., description="user email")
 
 
 class JWTTokenInfo(BaseModel):
     access_token: str = Field(..., description="JWT access token")
     refresh_token: str | None = Field(default=None, description="JWT refresh token")
     token_type: str | None = Field(default="Bearer", description="token type")
+
+
+class EventP(BaseModel):
+    user_id: str | None = Field(..., description="Unique identifier of the user")
+    event_type: EventType = Field(
+        ..., description="Type of the event (e.g., UserCreated, UserLogin)"
+    )
+    payload: dict[str, Any] = Field(
+        ..., description="Additional data related to the event"
+    )

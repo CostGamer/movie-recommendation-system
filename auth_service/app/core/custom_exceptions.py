@@ -4,3 +4,7 @@ class UserWithThisEmailExistsError(Exception):
 
 class TroublesWithRegistrationError(Exception):
     pass
+
+
+class InvalidUsernameOrPasswordError(Exception):
+    pass
