@@ -6,12 +6,52 @@ authors = ["Vladimir <vladimirbryzgalov00@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.12"
+python = "^3.12"
 fastapi = "^0.115.6"
 uvicorn = "^0.34.0"
+motor = "^3.6.0"
+beanie = "^1.28.0"
+pydantic = "^2.10.4"
+python-json-logger = "^3.2.1"
+pyjwt = {extras = ["crypto"], version = "^2.10.1"}
+bcrypt = "^4.2.1"
+email-validator = "^2.2.0"
 
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.14.1"
+black = "^24.10.0"
+ruff = "^0.8.5"
+pre-commit = "^4.0.1"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.mypy]
+files = ["movie-recommendation-system/auth_service/"]
+ignore_missing_imports = true
+disallow_untyped_calls = true
+disallow_untyped_defs = true
+plugins = ["pydantic.mypy"]
+
+
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "W191",  # indentation contains tabs
+    "B904",
+]
